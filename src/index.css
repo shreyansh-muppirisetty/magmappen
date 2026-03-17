@@ -2,77 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 70%;
-    --card: 240 6% 10%;
-    --card-foreground: 0 0% 70%;
-    --popover: 240 6% 10%;
-    --popover-foreground: 0 0% 70%;
-    --primary: 142 76% 45%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 70%;
-    --muted: 240 5% 15%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 142 76% 45%;
-    --accent-foreground: 0 0% 0%;
+    --background: 220 15% 96%;
+    --foreground: 220 20% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+    --primary: 220 90% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 90%;
+    --secondary-foreground: 220 20% 25%;
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 10% 46%;
+    --accent: 32 95% 55%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 5% 15%;
-    --input: 240 5% 15%;
-    --ring: 142 76% 45%;
-    --radius: 2px;
-    --surface: 240 6% 10%;
-    --display-bg: 142 70% 5%;
-    --vfd-glow: 150 100% 50%;
-    --key-surface: 0 0% 10%;
-    --key-text: 0 0% 70%;
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 0 0% 70%;
-    --sidebar-primary: 142 76% 45%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 240 6% 10%;
-    --sidebar-accent-foreground: 0 0% 70%;
-    --sidebar-border: 240 5% 15%;
-    --sidebar-ring: 142 76% 45%;
-  }
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 220 90% 56%;
+    --radius: 12px;
 
-  .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 70%;
-    --card: 240 6% 10%;
-    --card-foreground: 0 0% 70%;
-    --popover: 240 6% 10%;
-    --popover-foreground: 0 0% 70%;
-    --primary: 142 76% 45%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 70%;
-    --muted: 240 5% 15%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 142 76% 45%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 240 5% 15%;
-    --input: 240 5% 15%;
-    --ring: 142 76% 45%;
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 0 0% 70%;
-    --sidebar-primary: 142 76% 45%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 240 6% 10%;
-    --sidebar-accent-foreground: 0 0% 70%;
-    --sidebar-border: 240 5% 15%;
-    --sidebar-ring: 142 76% 45%;
+    /* Calculator tokens */
+    --calc-bg: 220 20% 97%;
+    --calc-display: 220 25% 12%;
+    --calc-display-text: 0 0% 100%;
+    --calc-key: 0 0% 100%;
+    --calc-key-text: 220 20% 20%;
+    --calc-key-hover: 220 14% 96%;
+    --calc-op: 220 90% 56%;
+    --calc-op-text: 0 0% 100%;
+    --calc-func: 220 14% 90%;
+    --calc-func-text: 220 20% 30%;
+
+    /* Games portal tokens */
+    --portal-bg: 240 15% 8%;
+    --portal-card: 240 12% 14%;
+    --portal-card-hover: 240 12% 18%;
+    --portal-accent: 270 80% 65%;
+    --portal-accent-2: 340 85% 60%;
+    --portal-accent-3: 170 80% 50%;
+    --portal-text: 0 0% 95%;
+    --portal-muted: 240 10% 50%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -80,8 +64,14 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
