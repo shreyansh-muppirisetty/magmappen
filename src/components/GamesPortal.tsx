@@ -3,34 +3,12 @@ import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost,
 import { useState, useMemo } from "react";
 
 const GAMES = [
-  { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Action", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Slope", icon: Zap, color: "hsl(270 80% 65%)", category: "Action", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "1v1.LOL", icon: Swords, color: "hsl(340 85% 60%)", category: "Shooter", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Retro Bowl", icon: Trophy, color: "hsl(30 90% 55%)", category: "Sports", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Run 3", icon: Zap, color: "hsl(170 80% 50%)", category: "Action", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Subway Surfers", icon: Car, color: "hsl(45 90% 55%)", category: "Endless", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Cookie Clicker", icon: Star, color: "hsl(30 80% 50%)", category: "Idle", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Pac-Man", icon: Ghost, color: "hsl(55 90% 55%)", category: "Arcade", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "2048", icon: Puzzle, color: "hsl(20 85% 55%)", category: "Puzzle", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Tetris", icon: Puzzle, color: "hsl(200 80% 55%)", category: "Puzzle", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Minecraft Classic", icon: Gamepad2, color: "hsl(120 60% 45%)", category: "Sandbox", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Among Us", icon: Ghost, color: "hsl(0 70% 55%)", category: "Social", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Snake", icon: Zap, color: "hsl(140 75% 45%)", category: "Arcade", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Flappy Bird", icon: Zap, color: "hsl(50 90% 55%)", category: "Arcade", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Drift Hunters", icon: Car, color: "hsl(210 80% 55%)", category: "Racing", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Basketball Stars", icon: Trophy, color: "hsl(25 90% 55%)", category: "Sports", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Crossy Road", icon: Gamepad2, color: "hsl(150 70% 50%)", category: "Arcade", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Paper.io", icon: Puzzle, color: "hsl(270 70% 60%)", category: "IO", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Smash Karts", icon: Car, color: "hsl(350 80% 55%)", category: "Racing", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Tunnel Rush", icon: Zap, color: "hsl(290 80% 60%)", category: "Action", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Moto X3M", icon: Car, color: "hsl(10 85% 55%)", category: "Racing", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Geometry Dash", icon: Zap, color: "hsl(200 90% 60%)", category: "Action", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Bloons TD", icon: Swords, color: "hsl(40 85% 55%)", category: "Strategy", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Shell Shockers", icon: Swords, color: "hsl(50 80% 50%)", category: "Shooter", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "Wordle", icon: Puzzle, color: "hsl(120 50% 45%)", category: "Puzzle", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
+  { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
+  { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g" },
+  { name: "OnWorks", icon: Star, color: "hsl(200 80% 55%)", category: "Portal", url: "https://onworks.net" },
 ];
 
-const CATEGORIES = ["All", "Action", "Arcade", "Puzzle", "Racing", "Shooter", "Sports", "Strategy", "IO", "Idle", "Sandbox", "Social", "Endless"];
+const CATEGORIES = ["All", "Portal"];
 
 const GamesPortal = ({ onBack }: { onBack: () => void }) => {
   const [search, setSearch] = useState("");
