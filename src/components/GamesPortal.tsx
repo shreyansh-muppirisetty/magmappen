@@ -5,17 +5,10 @@ import { useState, useMemo } from "react";
 const GAMES = [
   { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
   { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g" },
-  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Tools", url: "https://cymath.com" },
-  { name: "Now.gg", icon: Gamepad2, color: "hsl(150 75% 50%)", category: "Portal", url: "https://now.gg" },
-  { name: "Poki", icon: Puzzle, color: "hsl(30 90% 55%)", category: "Portal", url: "https://poki.com" },
-  { name: "CrazyGames", icon: Zap, color: "hsl(0 80% 60%)", category: "Portal", url: "https://www.crazygames.com" },
-  { name: "Kizi", icon: Star, color: "hsl(45 90% 55%)", category: "Portal", url: "https://kizi.com" },
-  { name: "Miniclip", icon: Trophy, color: "hsl(210 85% 55%)", category: "Portal", url: "https://www.miniclip.com" },
-  { name: "Armor Games", icon: Swords, color: "hsl(20 80% 50%)", category: "Portal", url: "https://armorgames.com" },
-  { name: "Kongregate", icon: Gamepad2, color: "hsl(350 75% 55%)", category: "Portal", url: "https://www.kongregate.com" },
+  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Portal", url: "https://cymath.com" },
 ];
 
-const CATEGORIES = ["All", "Portal", "Tools"];
+const CATEGORIES = ["All", "Portal"];
 
 const GamesPortal = ({ onBack }: { onBack: () => void }) => {
   const [search, setSearch] = useState("");
