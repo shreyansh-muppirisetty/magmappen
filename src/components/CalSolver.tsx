@@ -51,7 +51,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
     setDisplay(String(result));
     setExpression("");
     
-    if (result === 152399025) {
+    if (result === 30625156) {
       setTimeout(() => onUnlock(), 400);
     }
     
