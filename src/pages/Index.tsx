@@ -16,7 +16,7 @@ const Index = () => {
           className="min-h-svh w-full flex items-center justify-center p-4"
           style={{ background: "hsl(var(--calc-bg))" }}
         >
-          <div>
+          <div className="w-[400px] max-w-full">
             <h1 className="text-center font-display font-bold text-xl mb-1" style={{ color: "hsl(var(--calc-display))" }}>
               Calculator
             </h1>
