@@ -93,7 +93,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
   const isActiveOp = (k: string) => isOp(k) && operator === k && waitingForSecond;
 
   return (
-    <div className="w-full max-w-[360px] mx-auto">
+    <div className="w-full max-w-[400px] mx-auto px-2">
       {/* Display */}
       <div
         className="rounded-2xl px-6 py-5 mb-3"
