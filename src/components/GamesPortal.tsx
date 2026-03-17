@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 const GAMES = [
   { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
   { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g" },
-  { name: "OnWorks", icon: Star, color: "hsl(200 80% 55%)", category: "Portal", url: "https://onworks.net" },
+  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Portal", url: "https://cymath.com" },
 ];
 
 const CATEGORIES = ["All", "Portal"];
