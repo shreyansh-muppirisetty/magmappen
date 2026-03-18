@@ -1,0 +1,1 @@
+ALTER TABLE public.allowed_users ADD COLUMN expires_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
