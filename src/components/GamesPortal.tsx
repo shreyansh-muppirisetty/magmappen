@@ -14,6 +14,8 @@ const GAMES = [
   
   { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles" },
   { name: "CalcSolver", icon: Zap, color: "hsl(180 70% 50%)", category: "Study", url: "https://calcsolver.net" },
+  { name: "Magma", icon: Swords, color: "hsl(10 75% 55%)", category: "Portal", url: "https://magma.se" },
+  { name: "Liber Online", icon: Star, color: "hsl(210 70% 55%)", category: "Portal", url: "https://online.liber.se/" },
 ];
 
 const CATEGORIES = ["All", "Portal", "Study"];
