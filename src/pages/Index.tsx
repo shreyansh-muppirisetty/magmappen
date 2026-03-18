@@ -81,7 +81,7 @@ const Index = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <UserGate onPass={() => setView("games")} />
+          <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
         </motion.div>
       )}
 
