@@ -17,7 +17,7 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
 
     const { data, error: dbError } = await supabase
       .from("allowed_users")
-      .select("user_id, blocked, expires_at")
+      .select("user_id, blocked, expires_at, tier")
       .eq("user_id", userId.trim())
       .maybeSingle();
 
