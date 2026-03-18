@@ -85,6 +85,13 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
         )}
       </AnimatePresence>
 
+      {/* Trash tier promo banner */}
+      {tier === "trash" && (
+        <div className="w-full py-2.5 px-4 text-center text-sm font-display font-semibold" style={{ background: "hsl(45 90% 50%)", color: "hsl(0 0% 10%)" }}>
+          🔥 Convince 1 other person to get 90% off!
+        </div>
+      )}
+
       {/* Header */}
       <header className="sticky top-0 z-10 backdrop-blur-xl border-b" style={{ background: "hsl(var(--portal-bg) / 0.85)", borderColor: "hsl(0 0% 100% / 0.06)" }}>
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
