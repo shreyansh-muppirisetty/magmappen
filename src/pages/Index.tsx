@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
 import UserGate from "@/components/UserGate";
-import ProxiedIframe from "@/components/ProxiedIframe";
 
 type View = "magma" | "calculator" | "usergate" | "games";
 
@@ -34,8 +33,8 @@ const Index = () => {
           transition={{ duration: 0.3 }}
           className="relative min-h-svh w-full"
         >
-          <ProxiedIframe
-            url="https://magma.se"
+          <iframe
+            src="https://magma.se"
             className="w-full h-svh border-none"
             allow="fullscreen"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
