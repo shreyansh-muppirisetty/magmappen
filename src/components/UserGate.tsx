@@ -14,7 +14,7 @@ const UserGate = ({ onPass }: { onPass: () => void }) => {
 
     const { data, error: dbError } = await supabase
       .from("allowed_users")
-      .select("user_id, blocked")
+      .select("user_id, blocked, expires_at")
       .eq("user_id", userId.trim())
       .maybeSingle();
 
@@ -24,6 +24,8 @@ const UserGate = ({ onPass }: { onPass: () => void }) => {
       setError("Access denied. You are not authorized.");
     } else if (data.blocked) {
       setError("Your account has been blocked.");
+    } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
+      setError("Your account has expired. Please renew your subscription.");
     } else {
       onPass();
     }

@@ -18,18 +18,21 @@ export type Database = {
         Row: {
           blocked: boolean
           created_at: string
+          expires_at: string | null
           id: string
           user_id: string
         }
         Insert: {
           blocked?: boolean
           created_at?: string
+          expires_at?: string | null
           id?: string
           user_id: string
         }
         Update: {
           blocked?: boolean
           created_at?: string
+          expires_at?: string | null
           id?: string
           user_id?: string
         }
