@@ -86,7 +86,7 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
       </AnimatePresence>
 
       {/* Trash tier promo banner */}
-      {tier === "trash" && (
+      {(tier === "trash" || tier === "pro") && (
         <div className="w-full py-2.5 px-4 text-center text-sm font-display font-semibold" style={{ background: "hsl(45 90% 50%)", color: "hsl(0 0% 10%)" }}>
           🔥 Convince 1 other person to get 90% off!
         </div>
