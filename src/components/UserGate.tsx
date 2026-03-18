@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-const UserGate = ({ onPass }: { onPass: () => void }) => {
+type UserTier = Database["public"]["Enums"]["user_tier"];
+
+const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
