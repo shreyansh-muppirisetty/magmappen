@@ -239,7 +239,23 @@ const Admin = () => {
                      </span>
                    )}
                 </div>
-                <div className="flex items-center gap-1 mt-1">
+                <div className="flex items-center gap-3 mt-1">
+                  <select
+                    value={user.tier}
+                    onChange={(e) => updateTier(user.id, e.target.value as Tier)}
+                    className="text-xs px-2 py-1 rounded-lg outline-none"
+                    style={{
+                      background: "hsl(0 0% 100% / 0.08)",
+                      color: "hsl(var(--portal-muted))",
+                      border: "1px solid hsl(0 0% 100% / 0.1)",
+                    }}
+                  >
+                    {TIERS.map((t) => (
+                      <option key={t.value} value={t.value} style={{ background: "#1a1a2e", color: "#fff" }}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
                   <Popover open={editingExpiry === user.id} onOpenChange={(open) => setEditingExpiry(open ? user.id : null)}>
                     <PopoverTrigger asChild>
                       <button
