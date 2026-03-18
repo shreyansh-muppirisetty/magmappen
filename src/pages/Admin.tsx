@@ -41,6 +41,7 @@ const Admin = () => {
     const { error } = await supabase.from("allowed_users").insert({
       user_id: newId.trim(),
       expires_at: newExpiry ? newExpiry.toISOString() : null,
+      tier: newTier,
     });
     if (error) {
       alert(error.message);
@@ -48,6 +49,7 @@ const Admin = () => {
     }
     setNewId("");
     setNewExpiry(undefined);
+    setNewTier("freetrial");
     await fetchUsers();
   };
 
