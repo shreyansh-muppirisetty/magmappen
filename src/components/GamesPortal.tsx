@@ -61,8 +61,8 @@ const GamesPortal = ({ onBack }: { onBack: () => void }) => {
                 <X size={20} />
               </button>
             </div>
-            <iframe
-              src={`https://xubzjqrvclirkjztgjdw.supabase.co/functions/v1/proxy?url=${encodeURIComponent(activeGame.url)}`}
+            <ProxiedIframe
+              url={activeGame.url}
               className="flex-1 w-full border-none"
               allow="fullscreen; autoplay; gamepad"
               sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
