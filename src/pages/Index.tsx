@@ -1,16 +1,58 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
 
+type View = "magma" | "calculator" | "games";
+
 const Index = () => {
-  const [unlocked, setUnlocked] = useState(false);
+  const [view, setView] = useState<View>("magma");
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSecretTap = () => {
+    tapCount.current += 1;
+    if (tapTimer.current) clearTimeout(tapTimer.current);
+    tapTimer.current = setTimeout(() => {
+      tapCount.current = 0;
+    }, 1500);
+
+    if (tapCount.current >= 4) {
+      tapCount.current = 0;
+      setView("calculator");
+    }
+  };
 
   return (
     <AnimatePresence mode="wait">
-      {!unlocked ? (
+      {view === "magma" && (
+        <motion.div
+          key="magma"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative min-h-svh w-full"
+        >
+          <iframe
+            src="https://magma.se"
+            className="w-full h-svh border-none"
+            allow="fullscreen"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          />
+          {/* Secret tap zone — bottom-right corner */}
+          <button
+            onClick={handleSecretTap}
+            className="fixed bottom-0 right-0 w-16 h-16 z-50"
+            aria-hidden="true"
+            style={{ opacity: 0 }}
+          />
+        </motion.div>
+      )}
+
+      {view === "calculator" && (
         <motion.div
           key="calc"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
           className="min-h-svh w-full flex items-center justify-center p-4"
@@ -23,17 +65,19 @@ const Index = () => {
             <p className="text-center text-xs mb-5" style={{ color: "hsl(var(--muted-foreground))" }}>
               Simple & Clean
             </p>
-            <CalSolver onUnlock={() => setUnlocked(true)} />
+            <CalSolver onUnlock={() => setView("games")} />
           </div>
         </motion.div>
-      ) : (
+      )}
+
+      {view === "games" && (
         <motion.div
           key="games"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <GamesPortal onBack={() => setUnlocked(false)} />
+          <GamesPortal onBack={() => setView("magma")} />
         </motion.div>
       )}
     </AnimatePresence>
