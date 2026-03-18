@@ -160,6 +160,22 @@ const Admin = () => {
                 />
               </PopoverContent>
             </Popover>
+            <select
+              value={newTier}
+              onChange={(e) => setNewTier(e.target.value as Tier)}
+              className="px-4 py-2.5 rounded-xl text-sm outline-none"
+              style={{
+                background: "hsl(0 0% 100% / 0.08)",
+                color: "hsl(var(--portal-text))",
+                border: "1px solid hsl(0 0% 100% / 0.1)",
+              }}
+            >
+              {TIERS.map((t) => (
+                <option key={t.value} value={t.value} style={{ background: "#1a1a2e", color: "#fff" }}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
             <button
               onClick={addUser}
               className="px-4 py-2.5 rounded-xl flex items-center gap-2 text-sm font-medium"
