@@ -211,16 +211,25 @@ const Admin = () => {
                   <span className="font-medium text-sm" style={{ color: "hsl(var(--portal-text))" }}>
                     {user.user_id}
                   </span>
-                  {user.blocked && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(0 70% 50% / 0.2)", color: "hsl(0 70% 60%)" }}>
-                      Blocked
-                    </span>
-                  )}
-                  {isExpired(user.expires_at) && !user.blocked && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(40 80% 50% / 0.2)", color: "hsl(40 80% 55%)" }}>
-                      Expired
-                    </span>
-                  )}
+                   <span
+                     className="text-xs px-2 py-0.5 rounded-full"
+                     style={{
+                       background: user.tier === "hacker" ? "hsl(280 70% 50% / 0.2)" : user.tier === "pro" ? "hsl(200 70% 50% / 0.2)" : user.tier === "trash" ? "hsl(0 0% 50% / 0.2)" : "hsl(120 50% 50% / 0.2)",
+                       color: user.tier === "hacker" ? "hsl(280 70% 65%)" : user.tier === "pro" ? "hsl(200 70% 65%)" : user.tier === "trash" ? "hsl(0 0% 60%)" : "hsl(120 50% 60%)",
+                     }}
+                   >
+                     {TIERS.find(t => t.value === user.tier)?.label || user.tier}
+                   </span>
+                    {user.blocked && (
+                     <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(0 70% 50% / 0.2)", color: "hsl(0 70% 60%)" }}>
+                       Blocked
+                     </span>
+                   )}
+                   {isExpired(user.expires_at) && !user.blocked && (
+                     <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(40 80% 50% / 0.2)", color: "hsl(40 80% 55%)" }}>
+                       Expired
+                     </span>
+                   )}
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   <Popover open={editingExpiry === user.id} onOpenChange={(open) => setEditingExpiry(open ? user.id : null)}>
