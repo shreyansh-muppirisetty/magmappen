@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Op = "+" | "-" | "×" | "÷" | null;
@@ -9,7 +9,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
   const [operator, setOperator] = useState<Op>(null);
   const [waitingForSecond, setWaitingForSecond] = useState(false);
   const [expression, setExpression] = useState("");
-  const passedFirst = useRef(false);
+  
 
   const handleNumber = useCallback((num: string) => {
     if (waitingForSecond) {
@@ -52,9 +52,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
     setDisplay(String(result));
     setExpression("");
     
-    if (result === 30625156) {
-      passedFirst.current = true;
-    } else if (result === 152399025 && passedFirst.current) {
+    if (result === 152399025) {
       setTimeout(() => onUnlock(), 400);
     }
     

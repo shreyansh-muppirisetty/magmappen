@@ -2,8 +2,9 @@ import { useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
+import UserGate from "@/components/UserGate";
 
-type View = "magma" | "calculator" | "games";
+type View = "magma" | "calculator" | "usergate" | "games";
 
 const Index = () => {
   const [view, setView] = useState<View>("magma");
@@ -38,7 +39,6 @@ const Index = () => {
             allow="fullscreen"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
           />
-          {/* Secret tap zone — bottom-right corner */}
           <button
             onClick={handleSecretTap}
             className="fixed bottom-0 right-0 w-16 h-16 z-50"
@@ -65,8 +65,20 @@ const Index = () => {
             <p className="text-center text-xs mb-5" style={{ color: "hsl(var(--muted-foreground))" }}>
               Simple & Clean
             </p>
-            <CalSolver onUnlock={() => setView("games")} />
+            <CalSolver onUnlock={() => setView("usergate")} />
           </div>
+        </motion.div>
+      )}
+
+      {view === "usergate" && (
+        <motion.div
+          key="usergate"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <UserGate onPass={() => setView("games")} />
         </motion.div>
       )}
 
