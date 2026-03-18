@@ -1,26 +1,38 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, X } from "lucide-react";
+import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, X, Lock } from "lucide-react";
 import { useState, useMemo } from "react";
+import type { Database } from "@/integrations/supabase/types";
+
+type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const GAMES = [
-  { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
-  { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g" },
-  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Study", url: "https://cymath.com" },
-  { name: "Frogiee Edu", icon: Ghost, color: "hsl(140 70% 50%)", category: "Portal", url: "https://frogieeisback-edu.zone.id/" },
-  { name: "Math Zone", icon: Puzzle, color: "hsl(30 85% 55%)", category: "Portal", url: "https://math.kazw.net/" },
-  { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/" },
-  { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/" },
-  { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol" },
-  
-  { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles" },
-  { name: "CalcSolver", icon: Zap, color: "hsl(180 70% 50%)", category: "Study", url: "https://calcsolver.net" },
-  { name: "Magma", icon: Swords, color: "hsl(10 75% 55%)", category: "Portal", url: "https://magma.se" },
-  { name: "Liber Online", icon: Star, color: "hsl(210 70% 55%)", category: "Portal", url: "https://online.liber.se/" },
+  { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/", id: "gamehub" },
+  { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g", id: "55games" },
+  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Study", url: "https://cymath.com", id: "cymath" },
+  { name: "Frogiee Edu", icon: Ghost, color: "hsl(140 70% 50%)", category: "Portal", url: "https://frogieeisback-edu.zone.id/", id: "frogiee" },
+  { name: "Math Zone", icon: Puzzle, color: "hsl(30 85% 55%)", category: "Portal", url: "https://math.kazw.net/", id: "mathzone" },
+  { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/", id: "shadowrealm" },
+  { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/", id: "danishshoes" },
+  { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol", id: "browser" },
+  { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles", id: "googledoodles" },
+  { name: "CalcSolver", icon: Zap, color: "hsl(180 70% 50%)", category: "Study", url: "https://calcsolver.net", id: "calcsolver" },
+  { name: "Magma", icon: Swords, color: "hsl(10 75% 55%)", category: "Portal", url: "https://magma.se", id: "magma" },
 ];
+
+// Tier access: trash < pro < freetrial/hacker (all)
+const TRASH_GAMES = ["magma", "calcsolver", "googledoodles"];
+const PRO_GAMES = [...TRASH_GAMES, "danishshoes", "cymath"];
+
+function canAccessGame(tier: UserTier, gameId: string): boolean {
+  if (tier === "freetrial" || tier === "hacker") return true;
+  if (tier === "pro") return PRO_GAMES.includes(gameId);
+  if (tier === "trash") return TRASH_GAMES.includes(gameId);
+  return false;
+}
 
 const CATEGORIES = ["All", "Portal", "Study"];
 
-const GamesPortal = ({ onBack }: { onBack: () => void }) => {
+const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeGame, setActiveGame] = useState<typeof GAMES[0] | null>(null);
