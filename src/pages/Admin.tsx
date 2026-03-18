@@ -62,6 +62,14 @@ const Admin = () => {
     await fetchUsers();
   };
 
+  const updateTier = async (userId: string, tier: Tier) => {
+    await supabase
+      .from("allowed_users")
+      .update({ tier })
+      .eq("id", userId);
+    await fetchUsers();
+  };
+
   const toggleBlock = async (user: User) => {
     await supabase
       .from("allowed_users")
