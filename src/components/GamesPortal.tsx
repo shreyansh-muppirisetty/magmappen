@@ -10,8 +10,7 @@ const GAMES = [
   { name: "Math Zone", icon: Puzzle, color: "hsl(30 85% 55%)", category: "Portal", url: "https://math.kazw.net/" },
   { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/" },
   { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/" },
-  { name: "Magma", icon: Zap, color: "hsl(15 85% 55%)", category: "Study", url: "https://magma.se" },
-  { name: "Classroom", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://sites.google.com/classroom.center/view-1" },
+  { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol" },
 ];
 
 const CATEGORIES = ["All", "Portal", "Study"];
