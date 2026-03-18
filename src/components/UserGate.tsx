@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-const UserGate = ({ onPass }: { onPass: () => void }) => {
+type UserTier = Database["public"]["Enums"]["user_tier"];
+
+const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,7 +17,7 @@ const UserGate = ({ onPass }: { onPass: () => void }) => {
 
     const { data, error: dbError } = await supabase
       .from("allowed_users")
-      .select("user_id, blocked, expires_at")
+      .select("user_id, blocked, expires_at, tier")
       .eq("user_id", userId.trim())
       .maybeSingle();
 
@@ -27,7 +30,7 @@ const UserGate = ({ onPass }: { onPass: () => void }) => {
     } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
       setError("Your account has expired. Please renew your subscription.");
     } else {
-      onPass();
+      onPass(data.tier);
     }
     setLoading(false);
   };
