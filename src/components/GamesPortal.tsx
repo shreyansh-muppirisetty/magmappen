@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, X } from "lucide-react";
+import ProxiedIframe from "@/components/ProxiedIframe";
 import { useState, useMemo } from "react";
 
 const GAMES = [
