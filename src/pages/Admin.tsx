@@ -6,7 +6,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null };
+type Tier = "freetrial" | "trash" | "pro" | "hacker";
+const TIERS: { value: Tier; label: string }[] = [
+  { value: "freetrial", label: "Free Trial" },
+  { value: "trash", label: "Trash" },
+  { value: "pro", label: "Pro" },
+  { value: "hacker", label: "Hacker" },
+];
+
+type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier };
 
 const Admin = () => {
   const [users, setUsers] = useState<User[]>([]);
