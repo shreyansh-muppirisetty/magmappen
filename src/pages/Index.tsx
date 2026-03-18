@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
 import UserGate from "@/components/UserGate";
+import ProxiedIframe from "@/components/ProxiedIframe";
 
 type View = "magma" | "calculator" | "usergate" | "games";
 
