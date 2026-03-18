@@ -23,9 +23,14 @@ const Admin = () => {
 
   const addUser = async () => {
     if (!newId.trim()) return;
-    await supabase.from("allowed_users").insert({ user_id: newId.trim() });
+    const { error } = await supabase.from("allowed_users").insert({ user_id: newId.trim() });
+    if (error) {
+      console.error("Insert error:", error);
+      alert(error.message);
+      return;
+    }
     setNewId("");
-    fetchUsers();
+    await fetchUsers();
   };
 
   const toggleBlock = async (user: User) => {
