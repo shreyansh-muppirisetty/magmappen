@@ -10,7 +10,7 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
 
-  const ADMIN_PASS = "admin7749";
+  const ADMIN_PASS = "5534";
 
   const fetchUsers = async () => {
     const { data } = await supabase.from("allowed_users").select("*").order("created_at");
