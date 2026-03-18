@@ -5,15 +5,16 @@ import { useState, useMemo } from "react";
 const GAMES = [
   { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/" },
   { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g" },
-  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Portal", url: "https://cymath.com" },
+  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Study", url: "https://cymath.com" },
   { name: "Frogiee Edu", icon: Ghost, color: "hsl(140 70% 50%)", category: "Portal", url: "https://frogieeisback-edu.zone.id/" },
   { name: "Math Zone", icon: Puzzle, color: "hsl(30 85% 55%)", category: "Portal", url: "https://math.kazw.net/" },
   { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/" },
   { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/" },
-  { name: "Magma", icon: Zap, color: "hsl(15 85% 55%)", category: "Portal", url: "https://magma.se" },
+  { name: "Magma", icon: Zap, color: "hsl(15 85% 55%)", category: "Study", url: "https://magma.se" },
+  { name: "Classroom", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://sites.google.com/classroom.center/view-1" },
 ];
 
-const CATEGORIES = ["All", "Portal"];
+const CATEGORIES = ["All", "Portal", "Study"];
 
 const GamesPortal = ({ onBack }: { onBack: () => void }) => {
   const [search, setSearch] = useState("");
