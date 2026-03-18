@@ -11,6 +11,8 @@ const GAMES = [
   { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/" },
   { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/" },
   { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol" },
+  { name: "Popcorn Doodle", icon: Star, color: "hsl(50 85% 55%)", category: "Portal", url: "https://popcorndoodle.com" },
+  { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles" },
 ];
 
 const CATEGORIES = ["All", "Portal", "Study"];
