@@ -6,12 +6,21 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null };
+type Tier = "freetrial" | "trash" | "pro" | "hacker";
+const TIERS: { value: Tier; label: string }[] = [
+  { value: "freetrial", label: "Free Trial" },
+  { value: "trash", label: "Trash" },
+  { value: "pro", label: "Pro" },
+  { value: "hacker", label: "Hacker" },
+];
+
+type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier };
 
 const Admin = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [newId, setNewId] = useState("");
   const [newExpiry, setNewExpiry] = useState<Date | undefined>();
+  const [newTier, setNewTier] = useState<Tier>("freetrial");
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
   const [editingExpiry, setEditingExpiry] = useState<string | null>(null);
@@ -32,6 +41,7 @@ const Admin = () => {
     const { error } = await supabase.from("allowed_users").insert({
       user_id: newId.trim(),
       expires_at: newExpiry ? newExpiry.toISOString() : null,
+      tier: newTier,
     });
     if (error) {
       alert(error.message);
@@ -39,6 +49,7 @@ const Admin = () => {
     }
     setNewId("");
     setNewExpiry(undefined);
+    setNewTier("freetrial");
     await fetchUsers();
   };
 
@@ -48,6 +59,14 @@ const Admin = () => {
       .update({ expires_at: date ? date.toISOString() : null })
       .eq("id", userId);
     setEditingExpiry(null);
+    await fetchUsers();
+  };
+
+  const updateTier = async (userId: string, tier: Tier) => {
+    await supabase
+      .from("allowed_users")
+      .update({ tier })
+      .eq("id", userId);
     await fetchUsers();
   };
 
@@ -149,6 +168,22 @@ const Admin = () => {
                 />
               </PopoverContent>
             </Popover>
+            <select
+              value={newTier}
+              onChange={(e) => setNewTier(e.target.value as Tier)}
+              className="px-4 py-2.5 rounded-xl text-sm outline-none"
+              style={{
+                background: "hsl(0 0% 100% / 0.08)",
+                color: "hsl(var(--portal-text))",
+                border: "1px solid hsl(0 0% 100% / 0.1)",
+              }}
+            >
+              {TIERS.map((t) => (
+                <option key={t.value} value={t.value} style={{ background: "#1a1a2e", color: "#fff" }}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
             <button
               onClick={addUser}
               className="px-4 py-2.5 rounded-xl flex items-center gap-2 text-sm font-medium"
@@ -184,18 +219,43 @@ const Admin = () => {
                   <span className="font-medium text-sm" style={{ color: "hsl(var(--portal-text))" }}>
                     {user.user_id}
                   </span>
-                  {user.blocked && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(0 70% 50% / 0.2)", color: "hsl(0 70% 60%)" }}>
-                      Blocked
-                    </span>
-                  )}
-                  {isExpired(user.expires_at) && !user.blocked && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(40 80% 50% / 0.2)", color: "hsl(40 80% 55%)" }}>
-                      Expired
-                    </span>
-                  )}
+                   <span
+                     className="text-xs px-2 py-0.5 rounded-full"
+                     style={{
+                       background: user.tier === "hacker" ? "hsl(280 70% 50% / 0.2)" : user.tier === "pro" ? "hsl(200 70% 50% / 0.2)" : user.tier === "trash" ? "hsl(0 0% 50% / 0.2)" : "hsl(120 50% 50% / 0.2)",
+                       color: user.tier === "hacker" ? "hsl(280 70% 65%)" : user.tier === "pro" ? "hsl(200 70% 65%)" : user.tier === "trash" ? "hsl(0 0% 60%)" : "hsl(120 50% 60%)",
+                     }}
+                   >
+                     {TIERS.find(t => t.value === user.tier)?.label || user.tier}
+                   </span>
+                    {user.blocked && (
+                     <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(0 70% 50% / 0.2)", color: "hsl(0 70% 60%)" }}>
+                       Blocked
+                     </span>
+                   )}
+                   {isExpired(user.expires_at) && !user.blocked && (
+                     <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsl(40 80% 50% / 0.2)", color: "hsl(40 80% 55%)" }}>
+                       Expired
+                     </span>
+                   )}
                 </div>
-                <div className="flex items-center gap-1 mt-1">
+                <div className="flex items-center gap-3 mt-1">
+                  <select
+                    value={user.tier}
+                    onChange={(e) => updateTier(user.id, e.target.value as Tier)}
+                    className="text-xs px-2 py-1 rounded-lg outline-none"
+                    style={{
+                      background: "hsl(0 0% 100% / 0.08)",
+                      color: "hsl(var(--portal-muted))",
+                      border: "1px solid hsl(0 0% 100% / 0.1)",
+                    }}
+                  >
+                    {TIERS.map((t) => (
+                      <option key={t.value} value={t.value} style={{ background: "#1a1a2e", color: "#fff" }}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
                   <Popover open={editingExpiry === user.id} onOpenChange={(open) => setEditingExpiry(open ? user.id : null)}>
                     <PopoverTrigger asChild>
                       <button
