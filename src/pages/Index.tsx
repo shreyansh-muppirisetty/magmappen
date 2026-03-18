@@ -34,7 +34,7 @@ const Index = () => {
           className="relative min-h-svh w-full"
         >
           <iframe
-            src="https://magma.se"
+            src={`https://xubzjqrvclirkjztgjdw.supabase.co/functions/v1/proxy?url=${encodeURIComponent("https://magma.se")}`}
             className="w-full h-svh border-none"
             allow="fullscreen"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
