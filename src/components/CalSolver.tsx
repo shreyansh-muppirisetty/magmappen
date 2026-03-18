@@ -52,9 +52,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
     setDisplay(String(result));
     setExpression("");
     
-    if (result === 30625156) {
-      passedFirst.current = true;
-    } else if (result === 152399025 && passedFirst.current) {
+    if (result === 152399025) {
       setTimeout(() => onUnlock(), 400);
     }
     
