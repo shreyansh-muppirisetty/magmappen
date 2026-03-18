@@ -92,7 +92,7 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <GamesPortal onBack={() => setView("magma")} />
+          <GamesPortal onBack={() => setView("magma")} tier={userTier} />
         </motion.div>
       )}
     </AnimatePresence>

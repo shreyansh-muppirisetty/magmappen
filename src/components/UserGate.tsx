@@ -30,7 +30,7 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
     } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
       setError("Your account has expired. Please renew your subscription.");
     } else {
-      onPass();
+      onPass(data.tier);
     }
     setLoading(false);
   };

@@ -141,27 +141,37 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {filtered.map((game, i) => {
             const Icon = game.icon;
+            const locked = !canAccessGame(tier, game.id);
             return (
               <motion.button
                 key={game.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.03 }}
-                className="group rounded-xl p-4 text-left transition-all duration-200 hover:scale-[1.03]"
+                className="group rounded-xl p-4 text-left transition-all duration-200 hover:scale-[1.03] relative"
                 style={{
                   background: "hsl(var(--portal-card))",
                   border: "1px solid hsl(0 0% 100% / 0.04)",
+                  opacity: locked ? 0.45 : 1,
+                  cursor: locked ? "not-allowed" : "pointer",
                 }}
-                onClick={() => setActiveGame(game)}
+                onClick={() => !locked && setActiveGame(game)}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "hsl(var(--portal-card-hover))";
-                  e.currentTarget.style.borderColor = `${game.color}40`;
+                  if (!locked) {
+                    e.currentTarget.style.background = "hsl(var(--portal-card-hover))";
+                    e.currentTarget.style.borderColor = `${game.color}40`;
+                  }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = "hsl(var(--portal-card))";
                   e.currentTarget.style.borderColor = "hsl(0 0% 100% / 0.04)";
                 }}
               >
+                {locked && (
+                  <div className="absolute top-2 right-2">
+                    <Lock size={14} style={{ color: "hsl(var(--portal-muted))" }} />
+                  </div>
+                )}
                 <div
                   className="w-12 h-12 rounded-lg flex items-center justify-center mb-3"
                   style={{ background: `${game.color}20` }}
@@ -172,7 +182,7 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
                   {game.name}
                 </p>
                 <p className="text-[11px] mt-0.5" style={{ color: "hsl(var(--portal-muted))" }}>
-                  {game.category}
+                  {locked ? "🔒 Upgrade tier" : game.category}
                 </p>
               </motion.button>
             );
