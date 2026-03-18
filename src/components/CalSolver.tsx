@@ -9,7 +9,7 @@ const CalSolver = ({ onUnlock }: { onUnlock: () => void }) => {
   const [operator, setOperator] = useState<Op>(null);
   const [waitingForSecond, setWaitingForSecond] = useState(false);
   const [expression, setExpression] = useState("");
-  const passedFirst = useRef(false);
+  
 
   const handleNumber = useCallback((num: string) => {
     if (waitingForSecond) {
