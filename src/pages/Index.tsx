@@ -3,11 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
 import UserGate from "@/components/UserGate";
+import type { Database } from "@/integrations/supabase/types";
 
 type View = "magma" | "calculator" | "usergate" | "games";
+type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const Index = () => {
   const [view, setView] = useState<View>("magma");
+  const [userTier, setUserTier] = useState<UserTier>("freetrial");
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
