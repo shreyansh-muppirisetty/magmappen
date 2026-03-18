@@ -13,6 +13,7 @@ const GAMES = [
   { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol" },
   
   { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles" },
+  { name: "CalcSolver", icon: Zap, color: "hsl(180 70% 50%)", category: "Study", url: "https://calcsolver.net" },
 ];
 
 const CATEGORIES = ["All", "Portal", "Study"];
