@@ -11,7 +11,12 @@ type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const Index = () => {
   const [view, setView] = useState<View>("magma");
-  const [userTier, setUserTier] = useState<UserTier>("freetrial");
+  const [userTier, setUserTier] = useState<UserTier>(() => {
+    return (sessionStorage.getItem("userTier") as UserTier) || "freetrial";
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("isAuthenticated") === "true";
+  });
   const [redirectMessage, setRedirectMessage] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
   const tapCount = useRef(0);
@@ -60,7 +65,20 @@ const Index = () => {
     }
   };
 
+  const handleLogin = (tier: UserTier) => {
+    setUserTier(tier);
+    setIsAuthenticated(true);
+    sessionStorage.setItem("userTier", tier);
+    sessionStorage.setItem("isAuthenticated", "true");
+    setView("games");
+  };
+
   const handleCalcUnlock = async () => {
+    // If already authenticated, skip straight to games
+    if (isAuthenticated) {
+      setView("games");
+      return;
+    }
     // Check if redirect mode is active
     const { data } = await supabase.from("site_settings").select("*");
     if (data) {
@@ -176,7 +194,7 @@ const Index = () => {
             className="relative z-10"
           >
             <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-            <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
+            <UserGate onPass={handleLogin} />
           </motion.div>
         )}
 
