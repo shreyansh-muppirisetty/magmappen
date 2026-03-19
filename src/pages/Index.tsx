@@ -16,6 +16,10 @@ const Index = () => {
   const [redirectUrl, setRedirectUrl] = useState("");
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const topRightTapCount = useRef(0);
+  const topRightTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bottomRightTapCount = useRef(0);
+  const bottomRightTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSecretTap = () => {
     tapCount.current += 1;
@@ -27,6 +31,32 @@ const Index = () => {
     if (tapCount.current >= 4) {
       tapCount.current = 0;
       setView("calculator");
+    }
+  };
+
+  const handleTopRightTap = () => {
+    topRightTapCount.current += 1;
+    if (topRightTapTimer.current) clearTimeout(topRightTapTimer.current);
+    topRightTapTimer.current = setTimeout(() => {
+      topRightTapCount.current = 0;
+    }, 800);
+
+    if (topRightTapCount.current >= 2) {
+      topRightTapCount.current = 0;
+      setView("magma");
+    }
+  };
+
+  const handleBottomRightSkip = () => {
+    bottomRightTapCount.current += 1;
+    if (bottomRightTapTimer.current) clearTimeout(bottomRightTapTimer.current);
+    bottomRightTapTimer.current = setTimeout(() => {
+      bottomRightTapCount.current = 0;
+    }, 800);
+
+    if (bottomRightTapCount.current >= 2) {
+      bottomRightTapCount.current = 0;
+      setView("games");
     }
   };
 
