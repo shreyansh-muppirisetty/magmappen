@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           expires_at: string | null
           id: string
+          password: string
           tier: Database["public"]["Enums"]["user_tier"]
           user_id: string
         }
@@ -28,6 +29,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          password?: string
           tier?: Database["public"]["Enums"]["user_tier"]
           user_id: string
         }
@@ -36,6 +38,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          password?: string
           tier?: Database["public"]["Enums"]["user_tier"]
           user_id?: string
         }
