@@ -264,6 +264,9 @@ const Admin = () => {
                    )}
                 </div>
                 <div className="flex items-center gap-3 mt-1">
+                  <span className="text-xs" style={{ color: "hsl(var(--portal-muted))" }}>
+                    🔑 {user.password || "(no password)"}
+                  </span>
                   <select
                     value={user.tier}
                     onChange={(e) => updateTier(user.id, e.target.value as Tier)}
