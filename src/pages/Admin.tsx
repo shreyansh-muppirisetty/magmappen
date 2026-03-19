@@ -44,6 +44,7 @@ const Admin = () => {
       user_id: newId.trim(),
       expires_at: newExpiry ? newExpiry.toISOString() : null,
       tier: newTier,
+      password: newPassword,
     });
     if (error) {
       alert(error.message);
@@ -52,6 +53,7 @@ const Admin = () => {
     setNewId("");
     setNewExpiry(undefined);
     setNewTier("freetrial");
+    setNewPassword("");
     await fetchUsers();
   };
 
