@@ -35,7 +35,11 @@ const Index = () => {
 
     if (tapCount.current >= 4) {
       tapCount.current = 0;
-      setView("calculator");
+      if (isAuthenticated) {
+        setView("games");
+      } else {
+        setView("calculator");
+      }
     }
   };
 
