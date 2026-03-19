@@ -1,16 +1,19 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import CalSolver from "@/components/CalSolver";
 import GamesPortal from "@/components/GamesPortal";
 import UserGate from "@/components/UserGate";
+import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
-type View = "magma" | "calculator" | "usergate" | "games";
+type View = "magma" | "calculator" | "usergate" | "games" | "redirect";
 type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const Index = () => {
   const [view, setView] = useState<View>("magma");
   const [userTier, setUserTier] = useState<UserTier>("freetrial");
+  const [redirectMessage, setRedirectMessage] = useState("");
+  const [redirectUrl, setRedirectUrl] = useState("");
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -25,6 +28,22 @@ const Index = () => {
       tapCount.current = 0;
       setView("calculator");
     }
+  };
+
+  const handleCalcUnlock = async () => {
+    // Check if redirect mode is active
+    const { data } = await supabase.from("site_settings").select("*");
+    if (data) {
+      const settings: Record<string, string> = {};
+      for (const row of data) settings[row.key] = row.value;
+      if (settings["redirect_enabled"] === "true") {
+        setRedirectMessage(settings["redirect_message"] || "Website has moved.");
+        setRedirectUrl(settings["redirect_url"] || "");
+        setView("redirect");
+        return;
+      }
+    }
+    setView("usergate");
   };
 
   return (
@@ -68,7 +87,42 @@ const Index = () => {
             <p className="text-center text-xs mb-5" style={{ color: "hsl(var(--muted-foreground))" }}>
               Simple & Clean
             </p>
-            <CalSolver onUnlock={() => setView("usergate")} />
+            <CalSolver onUnlock={handleCalcUnlock} />
+          </div>
+        </motion.div>
+      )}
+
+      {view === "redirect" && (
+        <motion.div
+          key="redirect"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          className="min-h-svh w-full flex items-center justify-center p-6"
+          style={{ background: "hsl(var(--portal-bg))" }}
+        >
+          <div className="text-center max-w-md">
+            <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "hsl(45 90% 50% / 0.15)" }}>
+              <span className="text-3xl">🚧</span>
+            </div>
+            <h1 className="font-display font-bold text-xl mb-3" style={{ color: "hsl(var(--portal-text))" }}>
+              Heads up!
+            </h1>
+            <p className="text-sm mb-6 leading-relaxed" style={{ color: "hsl(var(--portal-muted))" }}>
+              {redirectMessage}
+            </p>
+            {redirectUrl && (
+              <a
+                href={redirectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 rounded-xl font-display font-semibold text-sm transition-transform hover:scale-105"
+                style={{ background: "hsl(var(--portal-accent))", color: "hsl(0 0% 100%)" }}
+              >
+                {redirectUrl.replace(/^https?:\/\//, "")}
+              </a>
+            )}
           </div>
         </motion.div>
       )}
