@@ -1,33 +1,30 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, X, Lock } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 type UserTier = Database["public"]["Enums"]["user_tier"];
 
-const GAMES = [
-  { name: "Game Hub", icon: Gamepad2, color: "hsl(270 80% 65%)", category: "Portal", url: "https://learningmathisreallyfun.b-cdn.net/?/", id: "gamehub" },
-  { name: "55 Games", icon: Zap, color: "hsl(340 85% 60%)", category: "Portal", url: "https://55gms.com/g", id: "55games" },
-  { name: "Cymath", icon: Star, color: "hsl(200 80% 55%)", category: "Study", url: "https://cymath.com", id: "cymath" },
-  { name: "Frogiee Edu", icon: Ghost, color: "hsl(140 70% 50%)", category: "Portal", url: "https://frogieeisback-edu.zone.id/", id: "frogiee" },
-  { name: "Math Zone", icon: Puzzle, color: "hsl(30 85% 55%)", category: "Portal", url: "https://math.kazw.net/", id: "mathzone" },
-  { name: "Shadow Realm", icon: Swords, color: "hsl(0 70% 50%)", category: "Portal", url: "https://shadow-realm.gravityenergygenerator.com/", id: "shadowrealm" },
-  { name: "Danish Shoes", icon: Car, color: "hsl(45 80% 55%)", category: "Portal", url: "https://danish-shoes.dalbirsinghbaraili.com.np/", id: "danishshoes" },
-  { name: "Browser", icon: Trophy, color: "hsl(220 75% 60%)", category: "Portal", url: "https://browser.lol", id: "browser" },
-  { name: "Google Doodles", icon: Puzzle, color: "hsl(120 65% 50%)", category: "Portal", url: "https://www.google.com/doodles", id: "googledoodles" },
-  { name: "CalcSolver", icon: Zap, color: "hsl(180 70% 50%)", category: "Study", url: "https://calcsolver.net", id: "calcsolver" },
-  { name: "Magma", icon: Swords, color: "hsl(10 75% 55%)", category: "Portal", url: "https://magma.se", id: "magma" },
-];
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
+  Gamepad2, Zap, Star, Ghost, Puzzle, Swords, Car, Trophy, Clock,
+};
 
-// Tier access: trash < pro < freetrial/hacker (all)
-const TRASH_GAMES = ["magma", "calcsolver", "googledoodles"];
-const PRO_GAMES = [...TRASH_GAMES, "danishshoes", "cymath"];
+type Game = {
+  id: string;
+  name: string;
+  url: string;
+  category: string;
+  icon: string;
+  color: string;
+  min_tier: UserTier;
+};
 
-function canAccessGame(tier: UserTier, gameId: string): boolean {
-  if (tier === "freetrial" || tier === "hacker") return true;
-  if (tier === "pro") return PRO_GAMES.includes(gameId);
-  if (tier === "trash") return TRASH_GAMES.includes(gameId);
-  return false;
+const TIER_RANK: Record<UserTier, number> = { trash: 0, pro: 1, freetrial: 2, hacker: 3 };
+
+function canAccessGame(userTier: UserTier, gameMinTier: UserTier): boolean {
+  if (userTier === "hacker" || userTier === "freetrial") return true;
+  return TIER_RANK[userTier] >= TIER_RANK[gameMinTier];
 }
 
 const CATEGORIES = ["All", "Portal", "Study"];
@@ -35,15 +32,24 @@ const CATEGORIES = ["All", "Portal", "Study"];
 const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [activeGame, setActiveGame] = useState<typeof GAMES[0] | null>(null);
+  const [activeGame, setActiveGame] = useState<Game | null>(null);
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      const { data } = await supabase.from("games").select("*").order("created_at");
+      if (data) setGames(data as Game[]);
+    };
+    fetchGames();
+  }, []);
 
   const filtered = useMemo(() => {
-    return GAMES.filter(g => {
+    return games.filter(g => {
       const matchSearch = g.name.toLowerCase().includes(search.toLowerCase());
       const matchCat = activeCategory === "All" || g.category === activeCategory;
       return matchSearch && matchCat;
     });
-  }, [search, activeCategory]);
+  }, [search, activeCategory, games]);
 
   return (
     <motion.div
@@ -85,7 +91,7 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
         )}
       </AnimatePresence>
 
-      {/* Trash tier promo banner */}
+      {/* Trash/Pro tier promo banner */}
       {(tier === "trash" || tier === "pro") && (
         <div className="w-full py-2.5 px-4 text-center text-sm font-display font-semibold" style={{ background: "hsl(45 90% 50%)", color: "hsl(0 0% 10%)" }}>
           🔥 Convince 1 other person to get 90% off!
@@ -147,11 +153,11 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
       <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {filtered.map((game, i) => {
-            const Icon = game.icon;
-            const locked = !canAccessGame(tier, game.id);
+            const Icon = ICON_MAP[game.icon] || Gamepad2;
+            const locked = !canAccessGame(tier, game.min_tier);
             return (
               <motion.button
-                key={game.name}
+                key={game.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.03 }}
