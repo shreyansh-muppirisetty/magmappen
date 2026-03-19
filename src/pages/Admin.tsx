@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, ShieldBan, ShieldCheck, Plus, CalendarIcon, AlertTriangle } from "lucide-react";
+import { Trash2, ShieldBan, ShieldCheck, Plus, CalendarIcon, AlertTriangle, MessageCircle } from "lucide-react";
 import GameManager from "@/components/admin/GameManager";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
@@ -131,6 +131,27 @@ const Admin = () => {
         <h1 className="font-display font-bold text-2xl mb-6" style={{ color: "hsl(var(--portal-text))" }}>
           Admin Panel
         </h1>
+
+        {/* Clear Chat */}
+        <div className="mb-10 p-4 rounded-xl" style={{ background: "hsl(var(--portal-card))", border: "1px solid hsl(0 0% 100% / 0.06)" }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MessageCircle size={18} style={{ color: "hsl(var(--portal-accent))" }} />
+              <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>Global Chat</span>
+            </div>
+            <button
+              onClick={async () => {
+                if (!confirm("Clear all chat messages?")) return;
+                await supabase.from("chat_messages").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+                alert("Chat cleared!");
+              }}
+              className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition-transform hover:scale-[1.02]"
+              style={{ background: "hsl(0 70% 50%)", color: "hsl(0 0% 100%)" }}
+            >
+              <Trash2 size={14} /> Clear All Messages
+            </button>
+          </div>
+        </div>
 
         {/* Redirect Manager */}
         <div className="mb-10">
