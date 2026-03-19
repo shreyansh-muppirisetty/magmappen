@@ -30,6 +30,8 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
       setError("Your account has been blocked.");
     } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
       setError("Your account has expired. Please renew your subscription.");
+    } else if (data.password && data.password !== password) {
+      setError("Incorrect password.");
     } else {
       onPass(data.tier);
     }
