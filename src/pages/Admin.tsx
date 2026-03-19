@@ -22,6 +22,7 @@ const Admin = () => {
   const [newId, setNewId] = useState("");
   const [newExpiry, setNewExpiry] = useState<Date | undefined>();
   const [newTier, setNewTier] = useState<Tier>("freetrial");
+  const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
   const [editingExpiry, setEditingExpiry] = useState<string | null>(null);
