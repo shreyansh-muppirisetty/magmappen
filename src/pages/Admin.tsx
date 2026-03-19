@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, ShieldBan, ShieldCheck, Plus, CalendarIcon, AlertTriangle } from "lucide-react";
+import { Trash2, ShieldBan, ShieldCheck, Plus, CalendarIcon, AlertTriangle, MessageCircle } from "lucide-react";
 import GameManager from "@/components/admin/GameManager";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
