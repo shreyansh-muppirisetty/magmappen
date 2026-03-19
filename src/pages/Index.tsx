@@ -16,6 +16,10 @@ const Index = () => {
   const [redirectUrl, setRedirectUrl] = useState("");
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const topRightTapCount = useRef(0);
+  const topRightTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bottomRightTapCount = useRef(0);
+  const bottomRightTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSecretTap = () => {
     tapCount.current += 1;
@@ -27,6 +31,32 @@ const Index = () => {
     if (tapCount.current >= 4) {
       tapCount.current = 0;
       setView("calculator");
+    }
+  };
+
+  const handleTopRightTap = () => {
+    topRightTapCount.current += 1;
+    if (topRightTapTimer.current) clearTimeout(topRightTapTimer.current);
+    topRightTapTimer.current = setTimeout(() => {
+      topRightTapCount.current = 0;
+    }, 800);
+
+    if (topRightTapCount.current >= 2) {
+      topRightTapCount.current = 0;
+      setView("magma");
+    }
+  };
+
+  const handleBottomRightSkip = () => {
+    bottomRightTapCount.current += 1;
+    if (bottomRightTapTimer.current) clearTimeout(bottomRightTapTimer.current);
+    bottomRightTapTimer.current = setTimeout(() => {
+      bottomRightTapCount.current = 0;
+    }, 800);
+
+    if (bottomRightTapCount.current >= 2) {
+      bottomRightTapCount.current = 0;
+      setView("games");
     }
   };
 
@@ -61,9 +91,17 @@ const Index = () => {
             allow="fullscreen"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
           />
+          {/* Bottom-right: 4-tap → calculator */}
           <button
             onClick={handleSecretTap}
             className="fixed bottom-0 right-0 w-16 h-16 z-50"
+            aria-hidden="true"
+            style={{ opacity: 0 }}
+          />
+          {/* Bottom-right: 2-tap skip to games (separate zone, left of secret tap) */}
+          <button
+            onClick={handleBottomRightSkip}
+            className="fixed bottom-0 right-16 w-16 h-16 z-50"
             aria-hidden="true"
             style={{ opacity: 0 }}
           />
@@ -77,9 +115,10 @@ const Index = () => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="min-h-svh w-full flex items-center justify-center p-4"
+          className="relative min-h-svh w-full flex items-center justify-center p-4"
           style={{ background: "hsl(var(--calc-bg))" }}
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <div className="w-[400px] max-w-full">
             <h1 className="text-center font-display font-bold text-xl mb-1" style={{ color: "hsl(var(--calc-display))" }}>
               Calculator
@@ -99,9 +138,10 @@ const Index = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="min-h-svh w-full flex items-center justify-center p-6"
+          className="relative min-h-svh w-full flex items-center justify-center p-6"
           style={{ background: "hsl(var(--portal-bg))" }}
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <div className="text-center max-w-md">
             <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "hsl(45 90% 50% / 0.15)" }}>
               <span className="text-3xl">🚧</span>
@@ -134,7 +174,9 @@ const Index = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
+          className="relative"
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
         </motion.div>
       )}
@@ -145,7 +187,9 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
+          className="relative"
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <GamesPortal onBack={() => setView("magma")} tier={userTier} />
         </motion.div>
       )}
