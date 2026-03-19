@@ -131,6 +131,7 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
               }}
             />
           </div>
+          <TabCloaker />
         </div>
 
         {/* Categories */}
