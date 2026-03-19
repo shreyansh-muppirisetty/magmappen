@@ -91,9 +91,17 @@ const Index = () => {
             allow="fullscreen"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
           />
+          {/* Bottom-right: 4-tap → calculator */}
           <button
             onClick={handleSecretTap}
             className="fixed bottom-0 right-0 w-16 h-16 z-50"
+            aria-hidden="true"
+            style={{ opacity: 0 }}
+          />
+          {/* Bottom-right: 2-tap skip to games (separate zone, left of secret tap) */}
+          <button
+            onClick={handleBottomRightSkip}
+            className="fixed bottom-0 right-16 w-16 h-16 z-50"
             aria-hidden="true"
             style={{ opacity: 0 }}
           />
