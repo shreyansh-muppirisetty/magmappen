@@ -7,6 +7,7 @@ type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
   const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +18,7 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
 
     const { data, error: dbError } = await supabase
       .from("allowed_users")
-      .select("user_id, blocked, expires_at, tier")
+      .select("user_id, blocked, expires_at, tier, password")
       .eq("user_id", userId.trim())
       .maybeSingle();
 
