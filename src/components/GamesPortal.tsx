@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, Globe, X, Lock } from "lucide-react";
+import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, Globe, X, Lock, MessageCircle } from "lucide-react";
 import TabCloaker from "./TabCloaker";
+import GlobalChat from "./GlobalChat";
 import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
@@ -9,7 +10,7 @@ type UserTier = Database["public"]["Enums"]["user_tier"];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ICON_MAP: Record<string, any> = {
-  Gamepad2, Zap, Star, Ghost, Puzzle, Swords, Car, Trophy, Clock, Globe,
+  Gamepad2, Zap, Star, Ghost, Puzzle, Swords, Car, Trophy, Clock, Globe, MessageCircle,
 };
 
 type Game = {
@@ -71,24 +72,46 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
             className="fixed inset-0 z-50 flex flex-col"
             style={{ background: "hsl(var(--portal-bg))" }}
           >
-            <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
-              <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
-                {activeGame.name}
-              </span>
-              <button
-                onClick={() => setActiveGame(null)}
-                className="p-2 rounded-lg transition-colors hover:bg-white/10"
-                style={{ color: "hsl(var(--portal-muted))" }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <iframe
-              src={activeGame.url}
-              className="flex-1 w-full border-none"
-              allow="fullscreen; autoplay; gamepad"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-            />
+            {activeGame.url === "__internal__chat" ? (
+              <>
+                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
+                  <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
+                    {activeGame.name}
+                  </span>
+                  <button
+                    onClick={() => setActiveGame(null)}
+                    className="p-2 rounded-lg transition-colors hover:bg-white/10"
+                    style={{ color: "hsl(var(--portal-muted))" }}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <GlobalChat />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
+                  <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
+                    {activeGame.name}
+                  </span>
+                  <button
+                    onClick={() => setActiveGame(null)}
+                    className="p-2 rounded-lg transition-colors hover:bg-white/10"
+                    style={{ color: "hsl(var(--portal-muted))" }}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <iframe
+                  src={activeGame.url}
+                  className="flex-1 w-full border-none"
+                  allow="fullscreen; autoplay; gamepad"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                />
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

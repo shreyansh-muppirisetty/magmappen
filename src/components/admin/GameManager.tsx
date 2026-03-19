@@ -21,7 +21,7 @@ const TIERS: { value: Tier; label: string }[] = [
   { value: "hacker", label: "Hacker" },
 ];
 
-const ICONS = ["Gamepad2", "Zap", "Star", "Ghost", "Puzzle", "Swords", "Car", "Trophy", "Clock", "Globe"];
+const ICONS = ["Gamepad2", "Zap", "Star", "Ghost", "Puzzle", "Swords", "Car", "Trophy", "Clock", "Globe", "MessageCircle"];
 const CATEGORIES = ["Portal", "Study"];
 
 const inputStyle = {
