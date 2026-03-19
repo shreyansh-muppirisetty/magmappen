@@ -77,123 +77,123 @@ const Index = () => {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      {view === "magma" && (
-        <motion.div
-          key="magma"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="relative min-h-svh w-full"
-        >
-          <iframe
-            src="https://magma.se"
-            className="w-full h-svh border-none"
-            allow="fullscreen"
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-          />
-          {/* Bottom-right: 4-tap → calculator */}
-          <button
-            onClick={handleSecretTap}
-            className="fixed bottom-0 right-0 w-16 h-16 z-50"
-            aria-hidden="true"
-            style={{ opacity: 0 }}
-          />
-          {/* Bottom-right: 2-tap skip to games (separate zone, left of secret tap) */}
-          <button
-            onClick={handleBottomRightSkip}
-            className="fixed bottom-0 right-16 w-16 h-16 z-50"
-            aria-hidden="true"
-            style={{ opacity: 0 }}
-          />
-        </motion.div>
-      )}
+    <div className="relative min-h-svh w-full">
+      {/* Magma iframe — always mounted to preserve state */}
+      <div
+        className="fixed inset-0 w-full h-full"
+        style={{ 
+          zIndex: view === "magma" ? 1 : -1,
+          visibility: view === "magma" ? "visible" : "hidden",
+        }}
+      >
+        <iframe
+          src="https://magma.se"
+          className="w-full h-full border-none"
+          allow="fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        />
+        <button
+          onClick={handleSecretTap}
+          className="fixed bottom-0 right-0 w-16 h-16 z-50"
+          aria-hidden="true"
+          style={{ opacity: 0 }}
+        />
+        <button
+          onClick={handleBottomRightSkip}
+          className="fixed bottom-0 right-16 w-16 h-16 z-50"
+          aria-hidden="true"
+          style={{ opacity: 0 }}
+        />
+      </div>
 
-      {view === "calculator" && (
-        <motion.div
-          key="calc"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="relative min-h-svh w-full flex items-center justify-center p-4"
-          style={{ background: "hsl(var(--calc-bg))" }}
-        >
-          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-          <div className="w-[400px] max-w-full">
-            <h1 className="text-center font-display font-bold text-xl mb-1" style={{ color: "hsl(var(--calc-display))" }}>
-              Calculator
-            </h1>
-            <p className="text-center text-xs mb-5" style={{ color: "hsl(var(--muted-foreground))" }}>
-              Simple & Clean
-            </p>
-            <CalSolver onUnlock={handleCalcUnlock} />
-          </div>
-        </motion.div>
-      )}
-
-      {view === "redirect" && (
-        <motion.div
-          key="redirect"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          className="relative min-h-svh w-full flex items-center justify-center p-6"
-          style={{ background: "hsl(var(--portal-bg))" }}
-        >
-          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-          <div className="text-center max-w-md">
-            <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "hsl(45 90% 50% / 0.15)" }}>
-              <span className="text-3xl">🚧</span>
+      <AnimatePresence mode="wait">
+        {view === "calculator" && (
+          <motion.div
+            key="calc"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            className="relative min-h-svh w-full flex items-center justify-center p-4 z-10"
+            style={{ background: "hsl(var(--calc-bg))" }}
+          >
+            <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
+            <div className="w-[400px] max-w-full">
+              <h1 className="text-center font-display font-bold text-xl mb-1" style={{ color: "hsl(var(--calc-display))" }}>
+                Calculator
+              </h1>
+              <p className="text-center text-xs mb-5" style={{ color: "hsl(var(--muted-foreground))" }}>
+                Simple & Clean
+              </p>
+              <CalSolver onUnlock={handleCalcUnlock} />
             </div>
-            <h1 className="font-display font-bold text-xl mb-3" style={{ color: "hsl(var(--portal-text))" }}>
-              Heads up!
-            </h1>
-            <p className="text-sm mb-6 leading-relaxed" style={{ color: "hsl(var(--portal-muted))" }}>
-              {redirectMessage}
-            </p>
-            {redirectUrl && (
-              <a
-                href={redirectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-3 rounded-xl font-display font-semibold text-sm transition-transform hover:scale-105"
-                style={{ background: "hsl(var(--portal-accent))", color: "hsl(0 0% 100%)" }}
-              >
-                {redirectUrl.replace(/^https?:\/\//, "")}
-              </a>
-            )}
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
 
-      {view === "usergate" && (
-        <motion.div
-          key="usergate"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="relative"
-        >
-          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-          <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
-        </motion.div>
-      )}
+        {view === "redirect" && (
+          <motion.div
+            key="redirect"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="relative min-h-svh w-full flex items-center justify-center p-6 z-10"
+            style={{ background: "hsl(var(--portal-bg))" }}
+          >
+            <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
+            <div className="text-center max-w-md">
+              <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "hsl(45 90% 50% / 0.15)" }}>
+                <span className="text-3xl">🚧</span>
+              </div>
+              <h1 className="font-display font-bold text-xl mb-3" style={{ color: "hsl(var(--portal-text))" }}>
+                Heads up!
+              </h1>
+              <p className="text-sm mb-6 leading-relaxed" style={{ color: "hsl(var(--portal-muted))" }}>
+                {redirectMessage}
+              </p>
+              {redirectUrl && (
+                <a
+                  href={redirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-6 py-3 rounded-xl font-display font-semibold text-sm transition-transform hover:scale-105"
+                  style={{ background: "hsl(var(--portal-accent))", color: "hsl(0 0% 100%)" }}
+                >
+                  {redirectUrl.replace(/^https?:\/\//, "")}
+                </a>
+              )}
+            </div>
+          </motion.div>
+        )}
 
-      {view === "games" && (
-        <motion.div
-          key="games"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="relative"
-        >
-          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-          <GamesPortal onBack={() => setView("magma")} tier={userTier} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+        {view === "usergate" && (
+          <motion.div
+            key="usergate"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative z-10"
+          >
+            <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
+            <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
+          </motion.div>
+        )}
+
+        {view === "games" && (
+          <motion.div
+            key="games"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="relative z-10"
+          >
+            <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
+            <GamesPortal onBack={() => setView("magma")} tier={userTier} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
