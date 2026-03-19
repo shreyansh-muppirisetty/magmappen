@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2, ShieldBan, ShieldCheck, Plus, CalendarIcon } from "lucide-react";
+import GameManager from "@/components/admin/GameManager";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -124,8 +125,17 @@ const Admin = () => {
     <div className="min-h-screen p-6" style={{ background: "hsl(var(--portal-bg))" }}>
       <div className="max-w-2xl mx-auto">
         <h1 className="font-display font-bold text-2xl mb-6" style={{ color: "hsl(var(--portal-text))" }}>
-          Manage Users
+          Admin Panel
         </h1>
+
+        {/* Game Manager */}
+        <div className="mb-10">
+          <GameManager />
+        </div>
+
+        <h2 className="font-display font-bold text-xl mb-4" style={{ color: "hsl(var(--portal-text))" }}>
+          Manage Users
+        </h2>
 
         {/* Add user */}
         <div className="flex flex-col gap-2 mb-6">

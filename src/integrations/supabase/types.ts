@@ -41,6 +41,39 @@ export type Database = {
         }
         Relationships: []
       }
+      games: {
+        Row: {
+          category: string
+          color: string
+          created_at: string
+          icon: string
+          id: string
+          min_tier: Database["public"]["Enums"]["user_tier"]
+          name: string
+          url: string
+        }
+        Insert: {
+          category?: string
+          color?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          min_tier?: Database["public"]["Enums"]["user_tier"]
+          name: string
+          url: string
+        }
+        Update: {
+          category?: string
+          color?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          min_tier?: Database["public"]["Enums"]["user_tier"]
+          name?: string
+          url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
