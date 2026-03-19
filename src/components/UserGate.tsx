@@ -59,8 +59,20 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
           type="text"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="Your user ID..."
+          className="w-full px-4 py-3 rounded-xl text-sm outline-none mb-3"
+          style={{
+            background: "hsl(0 0% 100% / 0.08)",
+            color: "hsl(var(--portal-text))",
+            border: "1px solid hsl(0 0% 100% / 0.1)",
+          }}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          placeholder="Password..."
           className="w-full px-4 py-3 rounded-xl text-sm outline-none mb-3"
           style={{
             background: "hsl(0 0% 100% / 0.08)",
