@@ -65,7 +65,20 @@ const Index = () => {
     }
   };
 
+  const handleLogin = (tier: UserTier) => {
+    setUserTier(tier);
+    setIsAuthenticated(true);
+    sessionStorage.setItem("userTier", tier);
+    sessionStorage.setItem("isAuthenticated", "true");
+    setView("games");
+  };
+
   const handleCalcUnlock = async () => {
+    // If already authenticated, skip straight to games
+    if (isAuthenticated) {
+      setView("games");
+      return;
+    }
     // Check if redirect mode is active
     const { data } = await supabase.from("site_settings").select("*");
     if (data) {
