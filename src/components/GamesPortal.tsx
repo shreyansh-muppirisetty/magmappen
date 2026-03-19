@@ -6,7 +6,8 @@ import type { Database } from "@/integrations/supabase/types";
 
 type UserTier = Database["public"]["Enums"]["user_tier"];
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; style?: React.CSSProperties }>> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ICON_MAP: Record<string, any> = {
   Gamepad2, Zap, Star, Ghost, Puzzle, Swords, Car, Trophy, Clock,
 };
 
