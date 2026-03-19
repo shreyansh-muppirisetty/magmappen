@@ -132,6 +132,11 @@ const Admin = () => {
           Admin Panel
         </h1>
 
+        {/* Redirect Manager */}
+        <div className="mb-10">
+          <RedirectManager />
+        </div>
+
         {/* Game Manager */}
         <div className="mb-10">
           <GameManager />
