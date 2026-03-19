@@ -194,7 +194,7 @@ const Index = () => {
             className="relative z-10"
           >
             <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
-            <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
+            <UserGate onPass={handleLogin} />
           </motion.div>
         )}
 
