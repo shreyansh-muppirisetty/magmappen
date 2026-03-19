@@ -10,14 +10,22 @@ type ChatMessage = {
   created_at: string;
 };
 
+const AVATARS = [
+  "😀", "😎", "🤖", "👾", "🐱", "🐶", "🦊", "🐸",
+  "🔥", "⚡", "💀", "👻", "🎮", "🧠", "🦄", "🐧",
+];
+
 const GlobalChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [username, setUsername] = useState(() => sessionStorage.getItem("chatUsername") || "");
+  const [avatar, setAvatar] = useState(() => sessionStorage.getItem("chatAvatar") || "");
   const [hasSetName, setHasSetName] = useState(() => !!sessionStorage.getItem("chatUsername"));
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Fetch today's messages only
+  // Build a map of username -> avatar from messages with avatar prefix
+  const avatarMap = useRef<Record<string, string>>({});
+
   const fetchMessages = async () => {
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
@@ -28,7 +36,18 @@ const GlobalChat = () => {
       .gte("created_at", todayStart.toISOString())
       .order("created_at", { ascending: true });
 
-    if (data) setMessages(data as ChatMessage[]);
+    if (data) {
+      const parsed = (data as ChatMessage[]).map((msg) => {
+        // Extract avatar from message prefix like "[😀] actual message"
+        const match = msg.message.match(/^\[(.{1,4})\] /);
+        if (match) {
+          avatarMap.current[msg.username] = match[1];
+          return { ...msg, message: msg.message.replace(/^\[.{1,4}\] /, "") };
+        }
+        return msg;
+      });
+      setMessages(parsed);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +59,14 @@ const GlobalChat = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "chat_messages" },
         (payload) => {
-          setMessages((prev) => [...prev, payload.new as ChatMessage]);
+          const msg = payload.new as ChatMessage;
+          const match = msg.message.match(/^\[(.{1,4})\] /);
+          if (match) {
+            avatarMap.current[msg.username] = match[1];
+            setMessages((prev) => [...prev, { ...msg, message: msg.message.replace(/^\[.{1,4}\] /, "") }]);
+          } else {
+            setMessages((prev) => [...prev, msg]);
+          }
         }
       )
       .subscribe();
@@ -61,14 +87,15 @@ const GlobalChat = () => {
     setNewMessage("");
     await supabase.from("chat_messages").insert({
       username,
-      message: trimmed,
+      message: `[${avatar}] ${trimmed}`,
     });
   };
 
   const handleSetName = () => {
     const trimmed = username.trim();
-    if (!trimmed) return;
+    if (!trimmed || !avatar) return;
     sessionStorage.setItem("chatUsername", trimmed);
+    sessionStorage.setItem("chatAvatar", avatar);
     setHasSetName(true);
   };
 
@@ -85,11 +112,30 @@ const GlobalChat = () => {
             <MessageCircle size={28} style={{ color: "hsl(var(--portal-accent))" }} />
           </div>
           <h2 className="font-display font-bold text-lg" style={{ color: "hsl(var(--portal-text))" }}>
-            Pick a username
+            Pick a username & avatar
           </h2>
           <p className="text-xs" style={{ color: "hsl(var(--portal-muted))" }}>
             Chat resets daily. Be nice.
           </p>
+
+          {/* Avatar picker */}
+          <div className="grid grid-cols-8 gap-2">
+            {AVATARS.map((a) => (
+              <button
+                key={a}
+                onClick={() => setAvatar(a)}
+                className="w-10 h-10 rounded-xl text-xl flex items-center justify-center transition-all"
+                style={{
+                  background: avatar === a ? "hsl(var(--portal-accent))" : "hsl(var(--portal-card))",
+                  border: avatar === a ? "2px solid hsl(var(--portal-accent))" : "1px solid hsl(0 0% 100% / 0.08)",
+                  transform: avatar === a ? "scale(1.15)" : "scale(1)",
+                }}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
+
           <input
             type="text"
             placeholder="Your name..."
@@ -106,7 +152,8 @@ const GlobalChat = () => {
           />
           <button
             onClick={handleSetName}
-            className="w-full py-3 rounded-xl font-display font-semibold text-sm transition-transform hover:scale-[1.02]"
+            disabled={!avatar || !username.trim()}
+            className="w-full py-3 rounded-xl font-display font-semibold text-sm transition-transform hover:scale-[1.02] disabled:opacity-50"
             style={{ background: "hsl(var(--portal-accent))", color: "hsl(0 0% 100%)" }}
           >
             Join Chat
@@ -138,10 +185,14 @@ const GlobalChat = () => {
         )}
         {messages.map((msg) => {
           const isMe = msg.username === username;
+          const msgAvatar = isMe ? avatar : (avatarMap.current[msg.username] || "👤");
           return (
-            <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
+            <div key={msg.id} className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : ""}`}>
+              <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm shrink-0" style={{ background: "hsl(var(--portal-card))" }}>
+                {msgAvatar}
+              </div>
               <div
-                className="max-w-[75%] px-3 py-2 rounded-xl"
+                className="max-w-[70%] px-3 py-2 rounded-xl"
                 style={{
                   background: isMe ? "hsl(var(--portal-accent))" : "hsl(var(--portal-card))",
                   color: isMe ? "hsl(0 0% 100%)" : "hsl(var(--portal-text))",
