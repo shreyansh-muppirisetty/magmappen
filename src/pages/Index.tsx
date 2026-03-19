@@ -174,7 +174,9 @@ const Index = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
+          className="relative"
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <UserGate onPass={(tier) => { setUserTier(tier); setView("games"); }} />
         </motion.div>
       )}
@@ -185,7 +187,9 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
+          className="relative"
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <GamesPortal onBack={() => setView("magma")} tier={userTier} />
         </motion.div>
       )}
