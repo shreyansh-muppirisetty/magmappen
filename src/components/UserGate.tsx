@@ -7,6 +7,7 @@ type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
   const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +18,7 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
 
     const { data, error: dbError } = await supabase
       .from("allowed_users")
-      .select("user_id, blocked, expires_at, tier")
+      .select("user_id, blocked, expires_at, tier, password")
       .eq("user_id", userId.trim())
       .maybeSingle();
 
@@ -29,6 +30,8 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
       setError("Your account has been blocked.");
     } else if (data.expires_at && new Date(data.expires_at) < new Date()) {
       setError("Your account has expired. Please renew your subscription.");
+    } else if (data.password && data.password !== password) {
+      setError("Incorrect password.");
     } else {
       onPass(data.tier);
     }
@@ -56,8 +59,20 @@ const UserGate = ({ onPass }: { onPass: (tier: UserTier) => void }) => {
           type="text"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="Your user ID..."
+          className="w-full px-4 py-3 rounded-xl text-sm outline-none mb-3"
+          style={{
+            background: "hsl(0 0% 100% / 0.08)",
+            color: "hsl(var(--portal-text))",
+            border: "1px solid hsl(0 0% 100% / 0.1)",
+          }}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          placeholder="Password..."
           className="w-full px-4 py-3 rounded-xl text-sm outline-none mb-3"
           style={{
             background: "hsl(0 0% 100% / 0.08)",

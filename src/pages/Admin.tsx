@@ -15,13 +15,14 @@ const TIERS: { value: Tier; label: string }[] = [
   { value: "hacker", label: "Hacker" },
 ];
 
-type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier };
+type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier; password: string };
 
 const Admin = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [newId, setNewId] = useState("");
   const [newExpiry, setNewExpiry] = useState<Date | undefined>();
   const [newTier, setNewTier] = useState<Tier>("freetrial");
+  const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
   const [editingExpiry, setEditingExpiry] = useState<string | null>(null);
@@ -43,6 +44,7 @@ const Admin = () => {
       user_id: newId.trim(),
       expires_at: newExpiry ? newExpiry.toISOString() : null,
       tier: newTier,
+      password: newPassword,
     });
     if (error) {
       alert(error.message);
@@ -51,6 +53,7 @@ const Admin = () => {
     setNewId("");
     setNewExpiry(undefined);
     setNewTier("freetrial");
+    setNewPassword("");
     await fetchUsers();
   };
 
@@ -144,8 +147,19 @@ const Admin = () => {
               type="text"
               value={newId}
               onChange={(e) => setNewId(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addUser()}
               placeholder="New user ID..."
+              className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none"
+              style={{
+                background: "hsl(0 0% 100% / 0.08)",
+                color: "hsl(var(--portal-text))",
+                border: "1px solid hsl(0 0% 100% / 0.1)",
+              }}
+            />
+            <input
+              type="text"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Password..."
               className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none"
               style={{
                 background: "hsl(0 0% 100% / 0.08)",
@@ -250,6 +264,9 @@ const Admin = () => {
                    )}
                 </div>
                 <div className="flex items-center gap-3 mt-1">
+                  <span className="text-xs" style={{ color: "hsl(var(--portal-muted))" }}>
+                    🔑 {user.password || "(no password)"}
+                  </span>
                   <select
                     value={user.tier}
                     onChange={(e) => updateTier(user.id, e.target.value as Tier)}
