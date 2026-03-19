@@ -72,24 +72,46 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
             className="fixed inset-0 z-50 flex flex-col"
             style={{ background: "hsl(var(--portal-bg))" }}
           >
-            <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
-              <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
-                {activeGame.name}
-              </span>
-              <button
-                onClick={() => setActiveGame(null)}
-                className="p-2 rounded-lg transition-colors hover:bg-white/10"
-                style={{ color: "hsl(var(--portal-muted))" }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <iframe
-              src={activeGame.url}
-              className="flex-1 w-full border-none"
-              allow="fullscreen; autoplay; gamepad"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-            />
+            {activeGame.url === "__internal__chat" ? (
+              <>
+                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
+                  <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
+                    {activeGame.name}
+                  </span>
+                  <button
+                    onClick={() => setActiveGame(null)}
+                    className="p-2 rounded-lg transition-colors hover:bg-white/10"
+                    style={{ color: "hsl(var(--portal-muted))" }}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <GlobalChat />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
+                  <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
+                    {activeGame.name}
+                  </span>
+                  <button
+                    onClick={() => setActiveGame(null)}
+                    className="p-2 rounded-lg transition-colors hover:bg-white/10"
+                    style={{ color: "hsl(var(--portal-muted))" }}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <iframe
+                  src={activeGame.url}
+                  className="flex-1 w-full border-none"
+                  allow="fullscreen; autoplay; gamepad"
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                />
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
