@@ -117,7 +117,7 @@ const GlobalChat = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen" style={{ background: "hsl(var(--portal-bg))" }}>
+    <div className="flex flex-col h-full" style={{ background: "hsl(var(--portal-bg))" }}>
       {/* Header */}
       <div className="px-4 py-3 border-b flex items-center gap-2" style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}>
         <MessageCircle size={18} style={{ color: "hsl(var(--portal-accent))" }} />
