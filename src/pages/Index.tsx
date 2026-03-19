@@ -11,7 +11,12 @@ type UserTier = Database["public"]["Enums"]["user_tier"];
 
 const Index = () => {
   const [view, setView] = useState<View>("magma");
-  const [userTier, setUserTier] = useState<UserTier>("freetrial");
+  const [userTier, setUserTier] = useState<UserTier>(() => {
+    return (sessionStorage.getItem("userTier") as UserTier) || "freetrial";
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("isAuthenticated") === "true";
+  });
   const [redirectMessage, setRedirectMessage] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
   const tapCount = useRef(0);
