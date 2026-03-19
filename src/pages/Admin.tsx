@@ -15,7 +15,7 @@ const TIERS: { value: Tier; label: string }[] = [
   { value: "hacker", label: "Hacker" },
 ];
 
-type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier };
+type User = { id: string; user_id: string; blocked: boolean; created_at: string; expires_at: string | null; tier: Tier; password: string };
 
 const Admin = () => {
   const [users, setUsers] = useState<User[]>([]);
