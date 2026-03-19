@@ -147,8 +147,19 @@ const Admin = () => {
               type="text"
               value={newId}
               onChange={(e) => setNewId(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addUser()}
               placeholder="New user ID..."
+              className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none"
+              style={{
+                background: "hsl(0 0% 100% / 0.08)",
+                color: "hsl(var(--portal-text))",
+                border: "1px solid hsl(0 0% 100% / 0.1)",
+              }}
+            />
+            <input
+              type="text"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Password..."
               className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none"
               style={{
                 background: "hsl(0 0% 100% / 0.08)",
