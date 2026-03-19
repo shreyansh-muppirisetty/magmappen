@@ -115,9 +115,10 @@ const Index = () => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="min-h-svh w-full flex items-center justify-center p-4"
+          className="relative min-h-svh w-full flex items-center justify-center p-4"
           style={{ background: "hsl(var(--calc-bg))" }}
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <div className="w-[400px] max-w-full">
             <h1 className="text-center font-display font-bold text-xl mb-1" style={{ color: "hsl(var(--calc-display))" }}>
               Calculator
@@ -137,9 +138,10 @@ const Index = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="min-h-svh w-full flex items-center justify-center p-6"
+          className="relative min-h-svh w-full flex items-center justify-center p-6"
           style={{ background: "hsl(var(--portal-bg))" }}
         >
+          <button onClick={handleTopRightTap} className="fixed top-0 right-0 w-16 h-16 z-50" aria-hidden="true" style={{ opacity: 0 }} />
           <div className="text-center max-w-md">
             <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ background: "hsl(45 90% 50% / 0.15)" }}>
               <span className="text-3xl">🚧</span>
