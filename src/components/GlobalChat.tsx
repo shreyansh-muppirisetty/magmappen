@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Send, MessageCircle } from "lucide-react";
+import { Send, MessageCircle, Camera } from "lucide-react";
 import { motion } from "framer-motion";
 
 type ChatMessage = {
@@ -21,10 +21,13 @@ const GlobalChat = () => {
   const [username, setUsername] = useState(() => sessionStorage.getItem("chatUsername") || "");
   const [avatar, setAvatar] = useState(() => sessionStorage.getItem("chatAvatar") || "");
   const [hasSetName, setHasSetName] = useState(() => !!sessionStorage.getItem("chatUsername"));
+  const [uploading, setUploading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Build a map of username -> avatar from messages with avatar prefix
   const avatarMap = useRef<Record<string, string>>({});
+
+  const isUrl = (str: string) => str.startsWith("http");
 
   const fetchMessages = async () => {
     const todayStart = new Date();
@@ -38,11 +41,10 @@ const GlobalChat = () => {
 
     if (data) {
       const parsed = (data as ChatMessage[]).map((msg) => {
-        // Extract avatar from message prefix like "[😀] actual message"
-        const match = msg.message.match(/^\[(.{1,4})\] /);
+        const match = msg.message.match(/^\[(.+?)\] /);
         if (match) {
           avatarMap.current[msg.username] = match[1];
-          return { ...msg, message: msg.message.replace(/^\[.{1,4}\] /, "") };
+          return { ...msg, message: msg.message.replace(/^\[.+?\] /, "") };
         }
         return msg;
       });
@@ -60,10 +62,10 @@ const GlobalChat = () => {
         { event: "INSERT", schema: "public", table: "chat_messages" },
         (payload) => {
           const msg = payload.new as ChatMessage;
-          const match = msg.message.match(/^\[(.{1,4})\] /);
+          const match = msg.message.match(/^\[(.+?)\] /);
           if (match) {
             avatarMap.current[msg.username] = match[1];
-            setMessages((prev) => [...prev, { ...msg, message: msg.message.replace(/^\[.{1,4}\] /, "") }]);
+            setMessages((prev) => [...prev, { ...msg, message: msg.message.replace(/^\[.+?\] /, "") }]);
           } else {
             setMessages((prev) => [...prev, msg]);
           }
@@ -91,12 +93,43 @@ const GlobalChat = () => {
     });
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const { error } = await supabase.storage.from("chat-avatars").upload(path, file);
+    if (!error) {
+      const { data: urlData } = supabase.storage.from("chat-avatars").getPublicUrl(path);
+      setAvatar(urlData.publicUrl);
+    }
+    setUploading(false);
+  };
+
   const handleSetName = () => {
     const trimmed = username.trim();
     if (!trimmed || !avatar) return;
     sessionStorage.setItem("chatUsername", trimmed);
     sessionStorage.setItem("chatAvatar", avatar);
     setHasSetName(true);
+  };
+
+  const renderAvatar = (src: string, size = "w-7 h-7 text-sm") => {
+    if (isUrl(src)) {
+      return (
+        <div className={`${size} rounded-full shrink-0 overflow-hidden`} style={{ background: "hsl(var(--portal-card))" }}>
+          <img src={src} alt="avatar" className="w-full h-full object-cover" />
+        </div>
+      );
+    }
+    return (
+      <div className={`${size} rounded-full flex items-center justify-center shrink-0`} style={{ background: "hsl(var(--portal-card))" }}>
+        {src}
+      </div>
+    );
   };
 
   if (!hasSetName) {
@@ -118,7 +151,40 @@ const GlobalChat = () => {
             Chat resets daily. Be nice.
           </p>
 
-          {/* Avatar picker */}
+          {/* Avatar preview */}
+          {avatar && (
+            <div className="flex justify-center">
+              {renderAvatar(avatar, "w-16 h-16 text-3xl")}
+            </div>
+          )}
+
+          {/* Upload custom image */}
+          <div className="flex justify-center">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all hover:scale-105 disabled:opacity-50"
+              style={{
+                background: "hsl(var(--portal-card))",
+                color: "hsl(var(--portal-text))",
+                border: "1px solid hsl(0 0% 100% / 0.08)",
+              }}
+            >
+              <Camera size={14} />
+              {uploading ? "Uploading..." : "Upload custom photo"}
+            </button>
+          </div>
+
+          <p className="text-[10px]" style={{ color: "hsl(var(--portal-muted))" }}>or pick an emoji</p>
+
+          {/* Emoji avatar picker */}
           <div className="grid grid-cols-8 gap-2">
             {AVATARS.map((a) => (
               <button
@@ -188,9 +254,7 @@ const GlobalChat = () => {
           const msgAvatar = isMe ? avatar : (avatarMap.current[msg.username] || "👤");
           return (
             <div key={msg.id} className={`flex items-end gap-2 ${isMe ? "flex-row-reverse" : ""}`}>
-              <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm shrink-0" style={{ background: "hsl(var(--portal-card))" }}>
-                {msgAvatar}
-              </div>
+              {renderAvatar(msgAvatar)}
               <div
                 className="max-w-[70%] px-3 py-2 rounded-xl"
                 style={{
