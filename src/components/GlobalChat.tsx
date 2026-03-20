@@ -262,9 +262,15 @@ const GlobalChat = () => {
         <span className="font-display font-bold text-sm" style={{ color: "hsl(var(--portal-text))" }}>
           Global Chat
         </span>
-        <span className="text-[11px] ml-auto" style={{ color: "hsl(var(--portal-muted))" }}>
-          Resets daily · {messages.length} messages
-        </span>
+        <div className="ml-auto flex items-center gap-3">
+          <span className="flex items-center gap-1 text-[11px]" style={{ color: "hsl(var(--portal-accent))" }}>
+            <span className="w-2 h-2 rounded-full inline-block animate-pulse" style={{ background: "hsl(140 70% 55%)" }} />
+            {onlineUsers.length} online
+          </span>
+          <span className="text-[11px]" style={{ color: "hsl(var(--portal-muted))" }}>
+            {messages.length} msgs
+          </span>
+        </div>
       </div>
 
       {/* Messages */}
