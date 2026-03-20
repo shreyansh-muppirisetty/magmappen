@@ -79,6 +79,30 @@ const GlobalChat = () => {
     };
   }, []);
 
+  // Presence tracking
+  useEffect(() => {
+    if (!hasSetName || !username) return;
+
+    const presence = supabase.channel("chat-presence", {
+      config: { presence: { key: username } },
+    });
+
+    presence
+      .on("presence", { event: "sync" }, () => {
+        const state = presence.presenceState();
+        setOnlineUsers(Object.keys(state));
+      })
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          await presence.track({ username });
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(presence);
+    };
+  }, [hasSetName, username]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
