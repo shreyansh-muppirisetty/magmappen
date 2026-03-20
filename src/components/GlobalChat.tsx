@@ -22,6 +22,7 @@ const GlobalChat = () => {
   const [avatar, setAvatar] = useState(() => sessionStorage.getItem("chatAvatar") || "");
   const [hasSetName, setHasSetName] = useState(() => !!sessionStorage.getItem("chatUsername"));
   const [uploading, setUploading] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
