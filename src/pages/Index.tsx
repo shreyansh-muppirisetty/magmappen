@@ -43,7 +43,7 @@ const Index = () => {
     }
   };
 
-  const handleTopRightTap = () => {
+  const handleTopRightTap = async () => {
     topRightTapCount.current += 1;
     if (topRightTapTimer.current) clearTimeout(topRightTapTimer.current);
     topRightTapTimer.current = setTimeout(() => {
@@ -52,6 +52,22 @@ const Index = () => {
 
     if (topRightTapCount.current >= 2) {
       topRightTapCount.current = 0;
+      // Open panic URL in new tab
+      let panicUrl = "https://www.google.com";
+      const customLinks = sessionStorage.getItem("panicCustomLinks");
+      if (customLinks) {
+        try {
+          const parsed = JSON.parse(customLinks);
+          if (parsed.length > 0) panicUrl = parsed[0].url;
+        } catch { /* ignore */ }
+      } else {
+        const { data } = await supabase.from("site_settings").select("*").like("key", "panic_link_%").limit(1);
+        if (data && data.length > 0) {
+          const parts = data[0].value.split("|");
+          panicUrl = parts[1] || parts[0];
+        }
+      }
+      window.open(panicUrl, "_blank");
       setView("magma");
     }
   };

@@ -1,0 +1,1 @@
+CREATE POLICY "Anyone can delete site_settings" ON public.site_settings FOR DELETE TO public USING (true);
