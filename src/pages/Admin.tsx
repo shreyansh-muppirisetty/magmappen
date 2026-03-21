@@ -7,6 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import RedirectManager from "@/components/admin/RedirectManager";
+import PanicLinkManager from "@/components/admin/PanicLinkManager";
 
 type Tier = "freetrial" | "trash" | "pro" | "hacker";
 const TIERS: { value: Tier; label: string }[] = [
