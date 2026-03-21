@@ -159,6 +159,11 @@ const Admin = () => {
           <RedirectManager />
         </div>
 
+        {/* Panic Link Manager */}
+        <div className="mb-10">
+          <PanicLinkManager />
+        </div>
+
         {/* Game Manager */}
         <div className="mb-10">
           <GameManager />
