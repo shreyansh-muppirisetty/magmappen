@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Star, Clock, Gamepad2, Zap, Trophy, Swords, Puzzle, Car, Ghost, Globe, X, Lock, MessageCircle } from "lucide-react";
-import PanicButton from "./PanicButton";
+import TabCloaker from "./TabCloaker";
 import GlobalChat from "./GlobalChat";
 import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -154,7 +154,7 @@ const GamesPortal = ({ onBack, tier }: { onBack: () => void; tier: UserTier }) =
               }}
             />
           </div>
-          <PanicButton />
+          <TabCloaker />
         </div>
 
         {/* Categories */}
